@@ -1,4 +1,5 @@
 import { AppState, Auth0Provider, User } from "@auth0/auth0-react";
+import { useCreateMyUser } from "../api/UserApi";
 
 type Props = {
   children: React.ReactNode;
@@ -6,6 +7,7 @@ type Props = {
 
 const Auth0ProviderWithNavigate = ({ children }: Props) => {
 //   const navigate = useNavigate();
+const {createUser} = useCreateMyUser();
 
   const domain = import.meta.env.VITE_AUTH0_DOMAIN;
   const clientId = import.meta.env.VITE_AUTH0_CLIENT_ID;
@@ -17,7 +19,9 @@ const Auth0ProviderWithNavigate = ({ children }: Props) => {
   }
 
   const onRedirectCallback = (appState?: AppState, user?: User) => {
-    console.log("User", user);
+    if(user?.sub && user?.email) {
+      createUser({auth0Id: user.sub, email: user.email})
+    }
     
   };
 
