@@ -1,5 +1,4 @@
-import { AppState, Auth0Provider, User } from "@auth0/auth0-react";
-import { useCreateMyUser } from "../api/UserApi";
+import { Auth0Provider} from "@auth0/auth0-react";
 import { useNavigate } from "react-router-dom";
 
 type Props = {
@@ -8,19 +7,18 @@ type Props = {
 
 const Auth0ProviderWithNavigate = ({ children }: Props) => {
 const navigate = useNavigate();
-const {createUser} = useCreateMyUser();
 
   const domain = import.meta.env.VITE_AUTH0_DOMAIN;
   const clientId = import.meta.env.VITE_AUTH0_CLIENT_ID;
   const redirectUri = import.meta.env.VITE_AUTH0_CALLBACK_URL;
-//   const audience = import.meta.env.VITE_AUTH0_AUDIENCE;
+  const audience = import.meta.env.VITE_AUTH0_AUDIENCE;
 
-  if (!domain || !clientId || !redirectUri ) {
+  if (!domain || !clientId || !redirectUri || !audience) {
     throw new Error("unable to initialise auth");
   }
 
   //called after user is redirect after login with auth0
-  const onRedirectCallback = (appState?: AppState, user?: User) => {
+  const onRedirectCallback = () => {
     navigate("/auth-callback")
     //navigate to another page which is wrapped with the authProvider (because I need to use useAuth)
   };
@@ -31,6 +29,7 @@ const {createUser} = useCreateMyUser();
       clientId={clientId}
       authorizationParams={{
         redirect_uri: redirectUri,
+        audience,
       }}
       onRedirectCallback={onRedirectCallback}
     >
