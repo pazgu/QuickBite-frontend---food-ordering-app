@@ -47,7 +47,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="mt-8 text-center text-sm border-t border-orange-400 pt-4">
-          <p>&copy; {new Date().getFullYear()} QuickBite. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} QuickBite. All rights reserved to Paz Gueta</p>
         </div>
       </div>
     </footer>
