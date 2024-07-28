@@ -5,6 +5,7 @@ import { BrowserRouter as Router } from "react-router-dom"
 import AppRoutes from './AppRoutes'
 import Auth0ProviderWithNavigate from './auth/Auth0ProviderWithNavigate'
 import {QueryClient, QueryClientProvider} from "react-query";
+import { Toaster } from 'sonner'
 
 //for managing and caching async data
 const queryClient = new QueryClient({
@@ -23,8 +24,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <QueryClientProvider client={queryClient}>
         <Auth0ProviderWithNavigate>
           <AppRoutes/>
+          <Toaster visibleToasts={1} position='top-right' richColors/>
         </Auth0ProviderWithNavigate>
       </QueryClientProvider>
     </Router>
-  </React.StrictMode>,
+  </React.StrictMode>
 )
