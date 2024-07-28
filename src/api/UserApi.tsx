@@ -1,13 +1,14 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useMutation, useQuery } from "react-query";
 import { toast } from "sonner";
+import { User } from "../types";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const useGetMyUser = () => {
   const {getAccessTokenSilently} = useAuth0();
 
-  const getMyUserRequest = async () => {
+  const getMyUserRequest = async () : Promise<User>  => {
     const accessToken = await getAccessTokenSilently();  
     const response = await fetch(`${API_BASE_URL}/api/my/user`, {
       method: "GET",
@@ -29,6 +30,7 @@ export const useGetMyUser = () => {
     error,
 
   } = useQuery("fetchCurrentUser", getMyUserRequest);
+  //fetchCurrentUser is a unique key for the specific query
 
   if(error) {
     toast.error(error.toString())
@@ -114,7 +116,7 @@ type CreateUserRequest = {
       isLoading,
       isSuccess,
       error,
-      reset
+      reset 
     } = useMutation(updateMyUserRequest);
 
     if(isSuccess) {
@@ -123,12 +125,12 @@ type CreateUserRequest = {
 
     if(error) {
       toast.error(error.toString())
-      reset();
+      reset(); //Clearing any error state, resetting the isSuccess and isLoading
     }
 
     return {
       updateUser,
-      isLoading,
+      isLoading
     }
   }
 
