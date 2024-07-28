@@ -1,8 +1,44 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { toast } from "sonner";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+export const useGetMyUser = () => {
+  const {getAccessTokenSilently} = useAuth0();
+
+  const getMyUserRequest = async () => {
+    const accessToken = await getAccessTokenSilently();  
+    const response = await fetch(`${API_BASE_URL}/api/my/user`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch user details");
+    }
+    return response.json();
+  };
+
+  const {
+    data: currentUser,
+    isLoading,
+    error,
+
+  } = useQuery("fetchCurrentUser", getMyUserRequest);
+
+  if(error) {
+    toast.error(error.toString())
+  }
+  
+  return {
+    currentUser,
+    isLoading
+  };
+}
 
 type CreateUserRequest = {
     auth0Id: string;
@@ -36,7 +72,7 @@ type CreateUserRequest = {
     } = useMutation(createMyUserRequest);
     //handle operations like creating, updating, or deleting data.
     //It allows UI updates before the server confirms the change, then automatically rolls back if there's an error
-  
+   
     return {
       createUser,
       isLoading,
@@ -58,7 +94,6 @@ type CreateUserRequest = {
 
     const updateMyUserRequest = async (formData: UpdateMyUserRequest ) => {
       const accessToken = await getAccessTokenSilently();
-      console.log("Access Token:", accessToken);  
       const response = await fetch(`${API_BASE_URL}/api/my/user`, {
         method: "PUT",
         headers: {
@@ -67,8 +102,6 @@ type CreateUserRequest = {
         },
         body: JSON.stringify(formData),
       });
-      console.log(JSON.stringify(formData));
-      
   
       if (!response.ok) {
         throw new Error("Failed to update user");
