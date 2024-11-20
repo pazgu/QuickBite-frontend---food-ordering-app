@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import MobileNav from "./MobileNav";
 import MainNav from "./MainNav";
+import logo from "../assets/logo.jpg";
 
 const Header = () => {
   return (
@@ -8,9 +9,16 @@ const Header = () => {
       <div className="container mx-auto flex justify-between items-center">
         <Link
           to="/"
-          className="text-3xl font-bold tracking-tight text-orange-500"
+          className="flex text-3xl font-bold tracking-tight text-orange-500"
         >
-          QuickBite
+          <img
+            src={logo}
+            alt="QuickBite Logo"
+            className="w-10 h-10 mr-2 rounded-full"
+          />
+          <span className="text-3xl font-bold tracking-tight text-orange-500">
+            QuickBite
+          </span>
         </Link>
         <div className="md:hidden">
           <MobileNav />
