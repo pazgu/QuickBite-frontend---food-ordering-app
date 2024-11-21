@@ -27,33 +27,33 @@ const formSchema = z.object({
 export type UserFormData = z.infer<typeof formSchema>;
 
 type Props = {
-  currentUser: User
+  currentUser: User;
   onSave: (userProfileData: UserFormData) => void;
   isLoading: boolean;
 };
 
-const UserProfileForm = ({onSave, isLoading, currentUser }: Props) => {
+const UserProfileForm = ({ onSave, isLoading, currentUser }: Props) => {
   const form = useForm<UserFormData>({
     resolver: zodResolver(formSchema), //handle validation
-    defaultValues: currentUser //sets the initial values of the form fields to currentUser
+    defaultValues: currentUser, //sets the initial values of the form fields to currentUser
   });
 
   useEffect(() => {
     form.reset(currentUser); //resets the form values to currentUser whenever currentUser changes
-  }, [currentUser, form])
+  }, [currentUser, form]);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    if (files.length > 5) {
-      form.setError("images", { message: "You can upload up to 5 images" });
-      return;
-    }
-    form.setValue("images", files);
-  
-    // Create preview URLs
-    const urls = files.map(file => URL.createObjectURL(file));
-    setImagePreviewUrls(urls);
-  };
+  // const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const files = Array.from(e.target.files || []);
+  //   if (files.length > 5) {
+  //     form.setError("images", { message: "You can upload up to 5 images" });
+  //     return;
+  //   }
+  //   form.setValue("images", files);
+
+  //   // Create preview URLs
+  //   const urls = files.map((file) => URL.createObjectURL(file));
+  //   setImagePreviewUrls(urls);
+  // };
 
   return (
     <Form {...form}>
@@ -134,30 +134,35 @@ const UserProfileForm = ({onSave, isLoading, currentUser }: Props) => {
               </FormItem>
             )}
           />
-          <FormField
-  control={form.control}
-  name="images"
-  render={({ field }) => (
-    <FormItem>
-      <FormLabel>Images (Max 5)</FormLabel>
-      <FormControl>
-        <Input 
-          type="file" 
-          accept="image/*" 
-          multiple 
-          onChange={handleImageChange}
-          className="bg-white"
-        />
-      </FormControl>
-      <FormMessage />
-      <div className="flex flex-wrap gap-2 mt-2">
-        {imagePreviewUrls.map((url, index) => (
-          <img key={index} src={url} alt={`Preview ${index + 1}`} className="w-20 h-20 object-cover" />
-        ))}
-      </div>
-    </FormItem>
-  )}
-/>
+          {/* <FormField
+            control={form.control}
+            name="images"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Images (Max 5)</FormLabel>
+                <FormControl>
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={handleImageChange}
+                    className="bg-white"
+                  />
+                </FormControl>
+                <FormMessage />
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {imagePreviewUrls.map((url, index) => (
+                    <img
+                      key={index}
+                      src={url}
+                      alt={`Preview ${index + 1}`}
+                      className="w-20 h-20 object-cover"
+                    />
+                  ))}
+                </div>
+              </FormItem>
+            )}
+          /> */}
         </div>
         {isLoading ? (
           <LoadingButton />
