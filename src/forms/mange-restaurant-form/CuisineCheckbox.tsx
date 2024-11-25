@@ -13,7 +13,7 @@ const CuisineCheckbox = ({ cuisine, field }: Props) => {
       <FormControl>
         <Checkbox
           className="bg-white"
-          checked={field.value.includes(cuisine)}
+          checked={field.value.includes(cuisine)} //returns true if the checkbox value is in the cuisines array
           onCheckedChange={(checked) => {
             if (checked) {
               field.onChange([...field.value, cuisine]);
