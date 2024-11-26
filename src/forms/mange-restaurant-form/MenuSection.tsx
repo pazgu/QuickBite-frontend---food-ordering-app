@@ -1,6 +1,7 @@
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { FormDescription, FormField, FormItem } from "../../components/ui/form";
 import { Button } from "../../components/ui/button";
+import MenuItemInput from "./MenuItemInput";
 
 const MenuSection = () => {
   const { control } = useFormContext();
