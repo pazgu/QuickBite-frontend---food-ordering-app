@@ -6,6 +6,8 @@ import MenuItemInput from "./MenuItemInput";
 const MenuSection = () => {
   const { control } = useFormContext();
 
+  //fields stands for the array of items the user chose (each is object with name and price)
+  //append and remove are coming also from react-hook-form and let us remove items from array much easily
   const { fields, append, remove } = useFieldArray({
     control,
     name: "menuItems",
