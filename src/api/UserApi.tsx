@@ -87,7 +87,7 @@ type UpdateMyUserRequest = {
   addressLine1: string;
   city: string;
   country: string;
-  images: File[];
+  // images: File[];
 };
 
 export const useUpdateMyUser = () => {
@@ -97,24 +97,24 @@ export const useUpdateMyUser = () => {
     const accessToken = await getAccessTokenSilently();
 
     const form = new FormData();
-    form.append('name', formData.name);
-    form.append('addressLine1', formData.addressLine1);
-    form.append('city', formData.city);
-    form.append('country', formData.country);
+    form.append("name", formData.name);
+    form.append("addressLine1", formData.addressLine1);
+    form.append("city", formData.city);
+    form.append("country", formData.country);
 
- // Check if images exist before trying to append them
- if (formData.images && formData.images.length > 0) {
-  formData.images.forEach((image, index) => {
-    form.append('images', image);
-  });
-}
+    // Check if images exist before trying to append them
+    // if (formData.images && formData.images.length > 0) {
+    //   formData.images.forEach((image) => {
+    //     form.append("images", image);
+    //   });
+    // }
 
     const response = await fetch(`${API_BASE_URL}/api/my/user`, {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
-       body: form,
+      body: form,
     });
 
     if (!response.ok) {
