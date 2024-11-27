@@ -123,6 +123,7 @@ export const useUpdateMyUser = () => {
   if (error) {
     toast.error(error.toString());
     reset();
+    //Clearing any error state, resetting the isSuccess and isLoading
   }
 
   return { updateUser, isLoading };
