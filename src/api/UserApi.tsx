@@ -10,6 +10,7 @@ export const useGetMyUser = () => {
 
   const getMyUserRequest = async (): Promise<User> => {
     const accessToken = await getAccessTokenSilently();
+
     const response = await fetch(`${API_BASE_URL}/api/my/user`, {
       method: "GET",
       headers: {
@@ -19,8 +20,9 @@ export const useGetMyUser = () => {
     });
 
     if (!response.ok) {
-      throw new Error("Failed to fetch user details");
+      throw new Error("Failed to fetch user");
     }
+
     return response.json();
   };
 
@@ -29,16 +31,12 @@ export const useGetMyUser = () => {
     isLoading,
     error,
   } = useQuery("fetchCurrentUser", getMyUserRequest);
-  //fetchCurrentUser is a unique key for the specific query
 
   if (error) {
     toast.error(error.toString());
   }
 
-  return {
-    currentUser,
-    isLoading,
-  };
+  return { currentUser, isLoading };
 };
 
 type CreateUserRequest = {
@@ -71,7 +69,6 @@ export const useCreateMyUser = () => {
     isError,
     isSuccess,
   } = useMutation(createMyUserRequest);
-  //handle operations like creating, updating, or deleting data.
   //It allows UI updates before the server confirms the change, then automatically rolls back if there's an error
 
   return {
@@ -87,7 +84,6 @@ type UpdateMyUserRequest = {
   addressLine1: string;
   city: string;
   country: string;
-  // images: File[];
 };
 
 export const useUpdateMyUser = () => {
@@ -96,30 +92,19 @@ export const useUpdateMyUser = () => {
   const updateMyUserRequest = async (formData: UpdateMyUserRequest) => {
     const accessToken = await getAccessTokenSilently();
 
-    const form = new FormData();
-    form.append("name", formData.name);
-    form.append("addressLine1", formData.addressLine1);
-    form.append("city", formData.city);
-    form.append("country", formData.country);
-
-    // Check if images exist before trying to append them
-    // if (formData.images && formData.images.length > 0) {
-    //   formData.images.forEach((image) => {
-    //     form.append("images", image);
-    //   });
-    // }
-
     const response = await fetch(`${API_BASE_URL}/api/my/user`, {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
       },
-      body: form,
+      body: JSON.stringify(formData),
     });
 
     if (!response.ok) {
       throw new Error("Failed to update user");
     }
+
     return response.json();
   };
 
@@ -137,11 +122,8 @@ export const useUpdateMyUser = () => {
 
   if (error) {
     toast.error(error.toString());
-    reset(); //Clearing any error state, resetting the isSuccess and isLoading
+    reset();
   }
 
-  return {
-    updateUser,
-    isLoading,
-  };
+  return { updateUser, isLoading };
 };
