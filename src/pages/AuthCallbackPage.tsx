@@ -1,7 +1,7 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { useCreateMyUser } from "../api/UserApi";
+import { useCreateMyUser } from "../api/MyUserApi";
 
 const AuthCallbackPage = () => {
   const navigate = useNavigate();
