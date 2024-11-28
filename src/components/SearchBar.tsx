@@ -5,6 +5,7 @@ import { Form, FormControl, FormField, FormItem } from "./ui/form";
 import { Search } from "lucide-react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
+import { useEffect } from "react";
 
 const formSchema = z.object({
   searchQuery: z.string({
@@ -14,7 +15,6 @@ const formSchema = z.object({
 
 export type SearchForm = z.infer<typeof formSchema>;
 
-//general props because this component will be displayed in 2 different pages
 type Props = {
   onSubmit: (formData: SearchForm) => void;
   placeHolder: string;
@@ -22,13 +22,18 @@ type Props = {
   searchQuery?: string;
 };
 
-const SearchBar = ({ onSubmit, placeHolder, onReset }: Props) => {
+const SearchBar = ({ onSubmit, onReset, placeHolder, searchQuery }: Props) => {
   const form = useForm<SearchForm>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      searchQuery: "",
+      searchQuery,
     },
   });
+
+  //ensures the form's searchQuery field dynamically updates whenever the searchQuery prop changes
+  useEffect(() => {
+    form.reset({ searchQuery });
+  }, [form, searchQuery]);
 
   const handleReset = () => {
     form.reset({
@@ -36,7 +41,6 @@ const SearchBar = ({ onSubmit, placeHolder, onReset }: Props) => {
     });
 
     if (onReset) {
-      //if prop has value (if parent wants to aff functionality to reset)
       onReset();
     }
   };
@@ -76,7 +80,7 @@ const SearchBar = ({ onSubmit, placeHolder, onReset }: Props) => {
             variant="outline"
             className="rounded-full"
           >
-            Reset
+            Clear
           </Button>
         )}
         <Button type="submit" className="rounded-full bg-orange-500">
