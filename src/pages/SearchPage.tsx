@@ -3,7 +3,15 @@ import { useSearchRestaurants } from "../api/RestaurantApi";
 
 const SearchPage = () => {
   const { city } = useParams();
-  const { results } = useSearchRestaurants(city);
+  const { results, isLoading } = useSearchRestaurants(city);
+
+  if (isLoading) {
+    <span>Loading ...</span>;
+  }
+
+  if (!results?.data || !city) {
+    return <span>No results found</span>;
+  }
 
   return (
     <div>
