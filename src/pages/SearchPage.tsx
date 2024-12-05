@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useSearchRestaurants } from "../api/RestaurantApi";
+import SearchResultInfo from "../components/SearchResultInfo";
 
 const SearchPage = () => {
   const { city } = useParams();
@@ -14,12 +15,11 @@ const SearchPage = () => {
   }
 
   return (
-    <div>
-      {results?.data.map((restaurant) => (
-        <span>
-          found - {restaurant.restaurantName}, {restaurant.city}
-        </span>
-      ))}
+    <div className="grid grid-cols-1 lg:grid-cols-[250px_1fr] gap-5">
+      <div id="cuisines-list">cuisines list will appear here</div>
+      <div id="main-content" className="flex flex-col gap-5">
+        <SearchResultInfo total={results.pagination.total} city={city} />
+      </div>
     </div>
   );
 };
