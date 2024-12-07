@@ -4,18 +4,30 @@ import SearchResultInfo from "../components/SearchResultInfo";
 import SearchResultCard from "../components/SearchResultCard";
 import { useState } from "react";
 import SearchBar, { SearchForm } from "../components/SearchBar";
+import PaginationSelector from "../components/PaginationSelector";
 
 export type SearchState = {
   searchQuery: string;
+  page: number;
 };
 
 const SearchPage = () => {
   const { city } = useParams();
   const [searchState, setSearchState] = useState<SearchState>({
     searchQuery: "",
+    page: 1,
   });
   const { results, isLoading } = useSearchRestaurants(searchState, city);
 
+  //passed to pagination component as props to handle change page
+  const setPage = (page: number) => {
+    setSearchState((prevState) => ({
+      ...prevState,
+      page,
+    }));
+  };
+
+  //passed to searchBar component as props to handle change in query
   const setSearchQuery = (searchFormData: SearchForm) => {
     setSearchState((prevState) => ({
       ...prevState, // so that values like cuisines and sort order will be saved
@@ -55,6 +67,11 @@ const SearchPage = () => {
         {results.data.map((restaurant) => (
           <SearchResultCard restaurant={restaurant} />
         ))}
+        <PaginationSelector
+          page={results.pagination.page}
+          pages={results.pagination.pages}
+          onPageChange={setPage}
+        />
       </div>
     </div>
   );
