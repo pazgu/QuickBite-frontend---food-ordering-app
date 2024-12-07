@@ -5,10 +5,12 @@ import SearchResultCard from "../components/SearchResultCard";
 import { useState } from "react";
 import SearchBar, { SearchForm } from "../components/SearchBar";
 import PaginationSelector from "../components/PaginationSelector";
+import CuisineFilter from "../components/CuisineFilter";
 
 export type SearchState = {
   searchQuery: string;
   page: number;
+  selectedCuisines: string[];
 };
 
 const SearchPage = () => {
@@ -16,8 +18,18 @@ const SearchPage = () => {
   const [searchState, setSearchState] = useState<SearchState>({
     searchQuery: "",
     page: 1,
+    selectedCuisines: [],
   });
   const { results, isLoading } = useSearchRestaurants(searchState, city);
+
+  //passed to cuisineFilter component as props to handle change in cuisines checked
+  const setSelectedCuisines = (selectedCuisines: string[]) => {
+    setSearchState((prevState) => ({
+      ...prevState,
+      selectedCuisines,
+      page: 1,
+    }));
+  };
 
   //passed to pagination component as props to handle change page
   const setPage = (page: number) => {
@@ -32,6 +44,7 @@ const SearchPage = () => {
     setSearchState((prevState) => ({
       ...prevState, // so that values like cuisines and sort order will be saved
       searchQuery: searchFormData.searchQuery,
+      page: 1,
     }));
   };
 
@@ -40,6 +53,7 @@ const SearchPage = () => {
       ...prevState,
       searchQuery: "",
       page: 1,
+      selectedCuisines: [],
     }));
   };
 
@@ -53,7 +67,12 @@ const SearchPage = () => {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[250px_1fr] gap-5">
-      <div id="cuisines-list"></div>
+      <div id="cuisines-list">
+        <CuisineFilter
+          selectedCuisines={searchState.selectedCuisines}
+          onChange={setSelectedCuisines}
+        />
+      </div>
       <div id="main-content" className="flex flex-col gap-5">
         <SearchBar
           searchQuery={searchState.searchQuery}
