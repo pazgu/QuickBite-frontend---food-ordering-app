@@ -6,11 +6,13 @@ import { useState } from "react";
 import SearchBar, { SearchForm } from "../components/SearchBar";
 import PaginationSelector from "../components/PaginationSelector";
 import CuisineFilter from "../components/CuisineFilter";
+import SortOptions from "../components/SortOptions";
 
 export type SearchState = {
   searchQuery: string;
   page: number;
   selectedCuisines: string[];
+  sortOption: string;
 };
 
 const SearchPage = () => {
@@ -19,6 +21,7 @@ const SearchPage = () => {
     searchQuery: "",
     page: 1,
     selectedCuisines: [],
+    sortOption: "bestMatch",
   });
 
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
@@ -38,6 +41,15 @@ const SearchPage = () => {
     setSearchState((prevState) => ({
       ...prevState,
       page,
+    }));
+  };
+
+  //passed to sortOptions component as props to handle change in sort method
+  const setSortOption = (sortOption: string) => {
+    setSearchState((prevState) => ({
+      ...prevState,
+      sortOption,
+      page: 1,
     }));
   };
 
@@ -88,6 +100,10 @@ const SearchPage = () => {
         />
         <div className="flex justify-between flex-col gap-3 lg:flex-row">
           <SearchResultInfo total={results.pagination.total} city={city} />
+          <SortOptions
+            sortOption={searchState.sortOption}
+            onChange={(value) => setSortOption(value)}
+          />
         </div>
 
         {results.data.map((restaurant) => (
