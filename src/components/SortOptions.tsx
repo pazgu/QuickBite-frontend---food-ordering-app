@@ -27,9 +27,10 @@ const SORT_OPTIONS = [
 ];
 
 const SortOptions = ({ onChange, sortOption }: Props) => {
+  //to retrieve the label of the current sort option
   const selectedSortLabel =
     SORT_OPTIONS.find((option) => option.value === sortOption)?.label ||
-    SORT_OPTIONS[0].label;
+    SORT_OPTIONS[0].label; //takes the default
 
   return (
     <DropdownMenu>
