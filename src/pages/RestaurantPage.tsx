@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useGetRestaurant } from "../api/RestaurantApi";
 import { AspectRatio } from "../components/ui/aspect-ratio";
 import RestaurantInfo from "../components/RestaurantInfo";
+import MenuItem from "../components/MenuItem";
 
 const RestaurantPage = () => {
   const { restaurantId } = useParams();
@@ -23,6 +24,9 @@ const RestaurantPage = () => {
         <div className="flex flex-col gap-4">
           <RestaurantInfo restaurant={restaurant} />
           <span className="text-2xl font-bold tracking-tight">Menu</span>
+          {restaurant.menuItems.map((menuProduct) => (
+            <MenuItem menuProduct={menuProduct} />
+          ))}
         </div>
       </div>
     </div>
