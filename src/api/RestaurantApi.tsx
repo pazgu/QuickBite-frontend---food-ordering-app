@@ -4,7 +4,7 @@ import { SearchState } from "../pages/SearchPage";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export const useGetRestaurant = (restaurantId: string) => {
+export const useGetRestaurant = (restaurantId?: string) => {
   const getRestaurantByIdRequest = async (): Promise<Restaurant> => {
     const response = await fetch(
       `${API_BASE_URL}/api/restaurant/${restaurantId}`
@@ -22,6 +22,7 @@ export const useGetRestaurant = (restaurantId: string) => {
     getRestaurantByIdRequest,
     {
       enabled: !!restaurantId,
+      //enable this query only if we have restaurantId (at first render f.e)
     }
   );
 
