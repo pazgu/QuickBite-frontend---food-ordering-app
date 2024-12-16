@@ -6,6 +6,7 @@ import MenuItem from "../components/MenuItem";
 import { useState } from "react";
 import { Card } from "../components/ui/card";
 import OrderSummary from "../components/OrderSummery";
+import { MenuProduct } from "../types";
 
 export type CartItem = {
   _id: string;
@@ -19,6 +20,37 @@ const RestaurantPage = () => {
   const { restaurant, isLoading } = useGetRestaurant(restaurantId);
 
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+
+  const addToCart = (menuItem: MenuProduct) => {
+    setCartItems((prevCartItems) => {
+      // checks scenario for if item is already in cart
+      const existingCartItem = prevCartItems.find(
+        (cartItem) => cartItem._id === menuItem._id
+      );
+
+      let updatedCartItems;
+
+      //if item exists, update the quantity
+      if (existingCartItem) {
+        updatedCartItems = prevCartItems.map((cartItem) =>
+          cartItem._id === menuItem._id
+            ? { ...cartItem, quantity: cartItem.quantity + 1 }
+            : cartItem
+        );
+      } else {
+        updatedCartItems = [
+          ...prevCartItems,
+          {
+            _id: menuItem._id,
+            name: menuItem.name,
+            price: menuItem.price,
+            quantity: 1,
+          },
+        ];
+      }
+      return updatedCartItems;
+    });
+  };
 
   if (isLoading || !restaurant) {
     return "Loading...";
@@ -37,7 +69,10 @@ const RestaurantPage = () => {
           <RestaurantInfo restaurant={restaurant} />
           <span className="text-2xl font-bold tracking-tight">Menu</span>
           {restaurant.menuItems.map((menuProduct) => (
-            <MenuItem menuProduct={menuProduct} />
+            <MenuItem
+              menuProduct={menuProduct}
+              addToCart={() => addToCart(menuProduct)}
+            />
           ))}
         </div>
 
