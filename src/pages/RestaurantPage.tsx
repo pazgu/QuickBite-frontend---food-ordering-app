@@ -3,10 +3,22 @@ import { useGetRestaurant } from "../api/RestaurantApi";
 import { AspectRatio } from "../components/ui/aspect-ratio";
 import RestaurantInfo from "../components/RestaurantInfo";
 import MenuItem from "../components/MenuItem";
+import { useState } from "react";
+import { Card } from "../components/ui/card";
+import OrderSummary from "../components/OrderSummery";
+
+export type CartItem = {
+  _id: string;
+  name: string;
+  price: number;
+  quantity: number;
+};
 
 const RestaurantPage = () => {
   const { restaurantId } = useParams();
   const { restaurant, isLoading } = useGetRestaurant(restaurantId);
+
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
   if (isLoading || !restaurant) {
     return "Loading...";
@@ -27,6 +39,12 @@ const RestaurantPage = () => {
           {restaurant.menuItems.map((menuProduct) => (
             <MenuItem menuProduct={menuProduct} />
           ))}
+        </div>
+
+        <div>
+          <Card>
+            <OrderSummary restaurant={restaurant} cartItems={cartItems} />
+          </Card>
         </div>
       </div>
     </div>
