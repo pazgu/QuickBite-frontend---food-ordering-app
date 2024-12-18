@@ -39,7 +39,7 @@ export const useGetMyUser = () => {
   return { currentUser, isLoading };
 };
 
- CreateUserRequest = {
+type CreateUserRequest = {
   auth0Id: string;
   email: string;
 };
