@@ -13,6 +13,8 @@ const ManageRestaurantPage = () => {
     useUpdateMyRestaurant();
 
   const isEditing = !!restaurant;
+  console.log(isEditing);
+
   //whenever the page loads for the first time we check if the restaurant already exists for the user
   // !! means give me the truthy value of this variable
 
